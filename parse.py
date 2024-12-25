@@ -108,9 +108,10 @@ def parse(lines):
         current_content.append(line)
 
     add_current_message() # redundancy
+    messages.append({"role": "assistant", "content": "Ignore this message. This is just because the fine-tuning API requires that the last message must be from the assistant"})
     return messages
 
-folder_path = "messages"
+folder_path = "test_messages"
 def main():
 
     all_data = []
