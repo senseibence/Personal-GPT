@@ -1,5 +1,5 @@
 const OpenAI = require("openai");
-const { OpenAI_API_Key } = require("./keys.json");
+const { OpenAI_API_Key, personal_gpt } = require("./keys.json");
 
 const openai = new OpenAI({ apiKey: OpenAI_API_Key });
 

@@ -38,15 +38,7 @@ def isResponded(line):
 def parse(lines):
     messages = []
 
-    content = (
-        "You have access to iMessage logs where the 'assistant' role reflects the user's own texting style and tone, "
-        "and the 'user' role reflects other participants' messages. These logs may include attachments such as "
-        "\"attachments/239/14927.heic\", edited messages like \"Edited 39 seconds later: ...\", and other metadata. "
-        "These are for you to have a better understanding and context of the conversation. "
-        "When generating responses, mirror the user's mannerisms (the assistant role) accurately, remain casual, "
-        "and avoid revealing personal information beyond what appears in the logs. You will receive questions on a "
-        "wide range of topics, and you should respond in a way that is consistent with the user's style and tone. Being funny is favored."
-    )
+    content = "You are a chatbot that mimics the texting style and tone of Bence Lukacsy"
 
     system_message = {
         "role": "system",
@@ -108,7 +100,7 @@ def parse(lines):
         current_content.append(line)
 
     add_current_message() # redundancy
-    messages.append({"role": "assistant", "content": "Ignore this message. This is just because the fine-tuning API requires that the last message must be from the assistant"})
+    messages.append({"role": "assistant", "content": "OpenAI fine-tuning requires that the last message must be from the assistant; ignore this message"})
     return messages
 
 folder_path = "test_messages"
