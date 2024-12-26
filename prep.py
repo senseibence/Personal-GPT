@@ -63,7 +63,9 @@ def num_tokens_from_messages(messages, tokens_per_message=3, tokens_per_name=1):
     for message in messages:
         num_tokens += tokens_per_message
         for key, value in message.items():
-            num_tokens += len(encoding.encode(value))
+            if key != "weight":
+                num_tokens += len(encoding.encode(value))
+            
             if key == "name":
                 num_tokens += tokens_per_name
     num_tokens += 3
@@ -105,7 +107,8 @@ print_distribution(n_messages, "num_messages_per_example")
 print_distribution(convo_lens, "num_total_tokens_per_example")
 print_distribution(assistant_message_lens, "num_assistant_tokens_per_example")
 n_too_long = sum(l > 65536 for l in convo_lens)
-print(f"\n{n_too_long} examples may be over the 65,536 token limit, they will be truncated during fine-tuning")
+print(f"\n{n_too_long} examples may be over the 65536 token limit, they will be truncated during fine-tuning")
+print()
 
 # Pricing and default n_epochs estimate
 MAX_TOKENS_PER_EXAMPLE = 65536
