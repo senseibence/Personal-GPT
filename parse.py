@@ -6,7 +6,7 @@ DATE_RE1 = re.compile(r"^[A-Z][a-z]{2}\s+\d{1,2},\s+\d{4}\s+\d{1,2}:\d{2}:\d{2}\
 DATE_RE2 = re.compile(r"^[A-Z][a-z]{2}\s+\d{1,2},\s+\d{4}\s+\d{1,2}:\d{2}:\d{2}\s?(AM|PM)\s")
 READ_RECEIPT_RE = re.compile(r"\(Read by.*\)$")
 TAPBACK_RE1 = re.compile(r"^Tapbacks:")
-TAPBACK_RE2 = re.compile(r"^[A-Z][a-z]+ by (?:\+1|Me)")
+TAPBACK_RE2 = re.compile(r"^[A-Z][a-z]+ by (?:\+1|Me|rawinhidalgo12@icloud\.com|webshaswat@gmail\.com)") # hardcoded emails because 1) there are only two, and 2) messages contain @gmail and @icloud
 SPEAKER_RE = re.compile(r"^(Me|\+\d[\d\s()+-]*)$")
 UNSENT_RE = re.compile(r"unsent a message!")
 RESPONDED_RE = re.compile(r"^This message responded to an earlier message")
@@ -38,7 +38,7 @@ def isResponded(line):
 def parse(lines):
     messages = []
 
-    content = "You are a chatbot that mimics the texting style and tone of Bence Lukacsy"
+    content = "You are a chatbot that mimics the texting style and tone of Bence Lukacsy. Bence uses informal speech, frequent abbreviations, emojis, and a casual tone. Keep responses short, funny, and authentic."
 
     system_message = {
         "role": "system",
@@ -54,7 +54,7 @@ def parse(lines):
         nonlocal messages, current_speaker, current_content
 
         if current_speaker and current_content: # current_speaker not none and current_content not empty
-            text = " ".join(current_content).strip() # combine multiline imessages
+            text = "\n".join(current_content).strip() # combine multiline and consecutive imessages
             if text:
                 role = "assistant" if current_speaker.lower() == "me" else "user"
                 messages.append({"role": role, "content": text})
@@ -74,14 +74,10 @@ def parse(lines):
 
         # skip when already responded in thread
         if isResponded(line): 
-            current_speaker = None
-            current_content = []
+            current_content.pop()
             continue
 
-        # when data is found, add current message and reset
         if isDate1(line):
-            temporary_speaker = current_speaker
-            add_current_message() # primary
             if isDate2(line):
                 if isReadReceipt(line): continue
                 if isUnsent(line): continue
@@ -89,21 +85,22 @@ def parse(lines):
                 # keep edited messages
                 curr_message = (re.split(DATE_RE2, line))[-1]
                 current_content.append(curr_message)
-                current_speaker = temporary_speaker
             continue
 
-        if isSpeaker(line):
-            add_current_message() # redundancy
+        # add current message when speaker changes
+        if (isSpeaker(line)) or (line == "webshaswat@gmail.com") or (line == "rawinhidalgo12@icloud.com"):
+            if (current_speaker != line.strip()):
+                add_current_message()
             current_speaker = line.strip()
             continue
 
         current_content.append(line)
 
     add_current_message() # redundancy
-    messages.append({"role": "assistant", "content": "OpenAI fine-tuning requires that the last message must be from the assistant; ignore this message"})
+    messages.append({"role": "assistant", "content": " ", "weight": 0}) # last message must be from assistant, so weight 0 to disable learning
     return messages
 
-folder_path = "test_messages"
+folder_path = "messages"
 def main():
 
     all_data = []
