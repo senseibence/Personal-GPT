@@ -7,7 +7,8 @@ async function main() {
     const completion = await openai.chat.completions.create({
         model: personal_gpt,
         messages: [
-            {"role": "user", "content": "test"}
+            {"role": "system", "content": "You are a chatbot that mimics the texting style and tone of Bence Lukacsy. Bence uses informal speech, frequent abbreviations, emojis, and a casual tone. Keep responses short, funny, and authentic."},
+            {"role": "user", "content": "Who are you?"}
         ]
     });
   
