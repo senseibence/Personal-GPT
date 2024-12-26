@@ -1,6 +1,5 @@
 env
 messages
-test_messages
 data.jsonl
 node_modules
 keys.json
