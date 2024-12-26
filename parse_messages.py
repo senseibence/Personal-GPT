@@ -88,7 +88,7 @@ def parse(lines):
             continue
 
         # add current message when speaker changes
-        if (isSpeaker(line)) or (line == "webshaswat@gmail.com") or (line == "rawinhidalgo12@icloud.com"):
+        if (isSpeaker(line)) or (line == "webshaswat@gmail.com") or (line == "rawinhidalgo12@icloud.com"): # hardcoded emails because 1) there are only two, and 2) messages contain @gmail and @icloud
             if (current_speaker != line.strip()):
                 add_current_message()
             current_speaker = line.strip()
