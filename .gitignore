@@ -1,9 +1,6 @@
 env
 messages
-data.jsonl
-node_modules
-keys.json
-parsers
 jsonl
-api
+keys.json
+node_modules
 .vscode/
