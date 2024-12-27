@@ -3,4 +3,7 @@ messages
 data.jsonl
 node_modules
 keys.json
+parsers
+jsonl
+api
 .vscode/
