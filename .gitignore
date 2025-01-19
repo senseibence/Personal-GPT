@@ -1,5 +1,6 @@
 env
-messages
+imessages
+discord_messages
 jsonl
 keys.json
 node_modules
