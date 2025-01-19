@@ -6,7 +6,7 @@ const openai = new OpenAI({ apiKey: openai_api_key });
 
 async function main() {
   const file = await openai.files.create({
-    file: fs.createReadStream("../jsonl/clean_data_final.jsonl"),
+    file: fs.createReadStream("../jsonl/clean_combined_data_final3.jsonl"),
     purpose: "fine-tune",
   });
 
