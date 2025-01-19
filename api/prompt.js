@@ -8,7 +8,7 @@ async function main() {
         model: personal_gpt,
         messages: [
             {"role": "system", "content": system_message_content},
-            {"role": "user", "content": "Who are you?"}
+            {"role": "user", "content": "test"}
         ]
     });
   
