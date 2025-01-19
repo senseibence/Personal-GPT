@@ -21,6 +21,10 @@ new_messages.append(system_message)
 for i in range(len(dataset)):
     messages = dataset[i]["messages"]
 
+    # api limit is 2048 msgs per example (this does not work)
+    # various decreasing increments did not work (1024, 999, 800, 700, 600)
+    # will settle for max 512 msgs per example
+
     if len(messages) <= 512: 
         all_data.append(dataset[i])
         continue
@@ -36,7 +40,7 @@ for i in range(len(dataset)):
 
         else: new_messages.append(messages[j])
 
-output = "../jsonl/clean_combined_data_final3.jsonl"
+output = "../jsonl/clean_combined_data_final.jsonl"
 with open(output, "w", encoding="utf-8") as file:
     for convo in all_data:
         file.write(json.dumps(convo, ensure_ascii=False) + "\n")
