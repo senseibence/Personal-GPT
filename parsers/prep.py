@@ -5,7 +5,7 @@ import tiktoken # for token counting
 import numpy as np
 from collections import defaultdict
 
-data_path = "../jsonl/clean_combined_data_final3.jsonl"
+data_path = "../jsonl/clean_combined_data_final.jsonl"
 
 # Load the dataset
 with open(data_path, 'r', encoding='utf-8') as f:
