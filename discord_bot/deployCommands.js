@@ -1,13 +1,17 @@
-const { REST, Routes, SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
+
 const { bot_token, bot_id } = require("../keys.json");
+
 
 const commands = [
     new SlashCommandBuilder()
         .setName("reset")
-        .setDescription("Resets conversation context")
-];
+        .setDescription("Resets conversation context"),
+]
 
-const rest = new REST({ version: '10' }).setToken(bot_token);
+const rest = new REST({ version: '9' }).setToken(bot_token);
 
 (async () => {
 	try {
@@ -15,8 +19,8 @@ const rest = new REST({ version: '10' }).setToken(bot_token);
 
 		await rest.put(
 
-			// for guild commands:
-			// Routes.applicationGuildCommands(bot_id, guild_id), 
+			// for guild commands
+			// Routes.applicationGuildCommands(clientId, guildId), 
 
 			Routes.applicationCommands(bot_id), 
 			{ body: commands },
