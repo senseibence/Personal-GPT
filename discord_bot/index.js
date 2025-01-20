@@ -10,23 +10,17 @@ const system_message = {
     "content": system_message_content
 }
 
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+const { Client, Intents } = require('discord.js');
 
-const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
-    ]
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+
+client.once('ready', () => {
+	console.log(`Ready! Logged in as ${client.user.tag}`);
 });
 
-client.once(Events.ClientReady, readyClient => {
-	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
-});
+client.on("interactionCreate", async (interaction) => {
 
-client.on(Events.InteractionCreate, async (interaction) => {
-
-    if (!interaction.isChatInputCommand()) return;
+    if (!interaction.isCommand()) return;
 
     try {
         await interaction.deferReply();
@@ -41,7 +35,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
 });
 
-client.on(Events.MessageCreate, async (message) => {
+client.on("messageCreate", async (message) => {
 
     if (message.author.bot) return;
 
