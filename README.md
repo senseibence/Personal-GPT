@@ -6,4 +6,4 @@
 
 #
 
-Fine-tuning not currently working with `gpt-4o-mini-2024-07-18` (see [here](https://community.openai.com/t/fine-tuning-fail-on-gpt-4o-mini-2024-07-18/1068918)). Project on hiatus.
+Fine-tuning not fully working with `gpt-4o-mini-2024-07-18` (see [here](https://community.openai.com/t/fine-tuning-fail-on-gpt-4o-mini-2024-07-18/1068918)).
