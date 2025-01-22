@@ -3,7 +3,7 @@ const { openai_api_key, personal_gpt, system_message_content, bot_token } = requ
 
 const openai = new OpenAI({ apiKey: openai_api_key });
 
-let conversation = [];
+let conversations = {};
 
 const system_message = {
     "role": "system",
@@ -29,8 +29,10 @@ client.on("interactionCreate", async (interaction) => {
         return;
     }
 
+    const currentServer = interaction.guild.id;
+
     if (interaction.commandName === "reset") {
-        conversation = [];
+        conversations[currentServer] = [];
         await interaction.editReply("Memory has been reset. I will not remember anything before this.");
     }
 });
@@ -38,6 +40,12 @@ client.on("interactionCreate", async (interaction) => {
 client.on("messageCreate", async (message) => {
 
     if (message.author.bot) return;
+
+    const currentServer = message.guild.id;
+
+    if (!(currentServer in conversations)) {
+        conversations[currentServer] = [];
+    }
 
     let isReplytoBot = false;
     if (message.reference) {
@@ -58,20 +66,20 @@ client.on("messageCreate", async (message) => {
     
     if (!msg_content) return;
 
-    conversation.push({ "role": "user", "content": msg_content });
+    conversations[currentServer].push({ "role": "user", "content": msg_content });
 
     // weird javascript syntax
-    const messages = [system_message, ...conversation];
+    const messages = [system_message, ...conversations[currentServer]];
 
     try {
         const response = await openai.chat.completions.create({
             model: personal_gpt,
             messages: messages,
-            temperature: 0.5
+            temperature: 0.8
         });
     
         const bot_response = response.choices[0].message.content;
-        conversation.push({ "role": "assistant", "content": bot_response });
+        conversations[currentServer].push({ "role": "assistant", "content": bot_response });
 
         message.channel.sendTyping();
         setTimeout(() => {
@@ -80,7 +88,7 @@ client.on("messageCreate", async (message) => {
         
     } catch (error) {
         console.error(error);
-        conversation = [];
+        conversations[currentServer] = [];
         message.reply("Something went wrong. Memory has been reset. I will not remember anything before this.").catch(error => {console.error(error)});
     }
 });
