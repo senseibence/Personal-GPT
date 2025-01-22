@@ -8,7 +8,8 @@ const { bot_token, bot_id } = require("../keys.json");
 const commands = [
     new SlashCommandBuilder()
         .setName("reset")
-        .setDescription("Resets conversation context"),
+        .setDescription("Resets conversation context")
+		.setDMPermission(false),
 ]
 
 const rest = new REST({ version: '9' }).setToken(bot_token);
