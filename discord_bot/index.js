@@ -82,14 +82,22 @@ client.on("messageCreate", async (message) => {
         conversations[currentServer].push({ "role": "assistant", "content": bot_response });
 
         message.channel.sendTyping();
-        setTimeout(() => {
-            message.reply(bot_response).catch(error => {console.error(error)});
+        setTimeout(async () => {
+
+            try {
+                await message.reply(bot_response);
+            } catch (error) {
+                console.error(error);
+                conversations[currentServer] = [];
+                await message.reply("Something went wrong. Memory has been reset. I will not remember anything before this.").catch(error => {console.error(error)});
+            }
+            
         }, 2500);
         
     } catch (error) {
         console.error(error);
         conversations[currentServer] = [];
-        message.reply("Something went wrong. Memory has been reset. I will not remember anything before this.").catch(error => {console.error(error)});
+        await message.reply("Something went wrong. Memory has been reset. I will not remember anything before this.").catch(error => {console.error(error)});
     }
 });
 
