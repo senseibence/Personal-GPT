@@ -5,7 +5,7 @@ with open("../keys.json", "r") as file:
 
 system_message_content = keys["system_message_content"]
 
-data_path = "../jsonl/clean_combined_data.jsonl"
+data_path = "../jsonl/adjusted_clean_combined_data.jsonl"
 
 with open(data_path, 'r', encoding='utf-8') as f:
     dataset = [json.loads(line) for line in f]
@@ -23,15 +23,15 @@ for i in range(len(dataset)):
 
     # api limit is 2048 msgs per example (this does not work)
     # various decreasing increments did not work (1024, 999, 800, 700, 600)
-    # will settle for max 512 msgs per example
+    # 512 msgs per example works
 
-    if len(messages) <= 512: 
+    if len(messages) <= 534: 
         all_data.append(dataset[i])
         continue
 
     for j in range(1, len(messages)):
 
-        if ((j % 511 == 0) or (j == len(messages)-1)):
+        if ((j % 533 == 0) or (j == len(messages)-1)):
             new_messages.append({"role": "assistant", "content": " ", "weight": 0})
             conversation = {"messages": new_messages}
             all_data.append(conversation)
@@ -40,7 +40,7 @@ for i in range(len(dataset)):
 
         else: new_messages.append(messages[j])
 
-output = "../jsonl/clean_combined_data_final.jsonl"
+output = "../jsonl/adjusted_clean_combined_data_final.jsonl"
 with open(output, "w", encoding="utf-8") as file:
     for convo in all_data:
         file.write(json.dumps(convo, ensure_ascii=False) + "\n")
