@@ -40,6 +40,7 @@ client.on("interactionCreate", async (interaction) => {
 client.on("messageCreate", async (message) => {
 
     if (message.author.bot) return;
+    if (message.mentions.everyone) return;
 
     const currentServer = message.guild.id;
 
